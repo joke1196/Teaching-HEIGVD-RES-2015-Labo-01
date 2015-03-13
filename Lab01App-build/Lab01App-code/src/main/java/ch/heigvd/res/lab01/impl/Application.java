@@ -92,8 +92,11 @@ public class Application implements IApplication {
        * one method provided by this class, which is responsible for storing the content of the
        * quote in a text file (and for generating the directories based on the tags).
        */
-      LOG.info(quote.getSource());
+      
+      this.storeQuote(quote, "quote-" + i + ".utf8");
+      
       for (String tag : quote.getTags()) {
+              LOG.info(quote.getSource());
         LOG.info("> " + tag);
       }
     }
@@ -125,7 +128,20 @@ public class Application implements IApplication {
    * @throws IOException 
    */
   void storeQuote(Quote quote, String filename) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+//    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+      String parentDir = WORKSPACE_DIRECTORY;
+      
+      for(String s: quote.getTags()){
+          //create directories and subdirectories  
+            
+            parentDir = parentDir + File.separator + s; 
+      }
+      File newDir = new File(parentDir);
+       newDir.mkdirs();
+      //store the quote in the text file
+      File f = new File(newDir, filename);
+      f.createNewFile();
+      FileUtils.writeStringToFile(f, quote.getQuote(), "UTF-8");
   }
   
   /**
@@ -142,19 +158,31 @@ public class Application implements IApplication {
          * of the the IFileVisitor interface inline. You just have to add the body of the visit method, which should
          * be pretty easy (we want to write the filename, including the path, to the writer passed in argument).
          */
+        try{
+            System.out.println("ps pbrlmn");
+            writer.write(file.getPath().replaceAll("\\\\", "/")+"\n");
+        }
+        catch(IOException ex){
+            System.out.println("pbrlmn");
+            LOG.log(Level.WARNING, "Error while printing file name", ex.getMessage());
+        }
+        
       }
     });
   }
   
   @Override
   public String getAuthorEmail() {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    return "david.kunzmann@heig-vd.ch";
+//    throw new UnsupportedOperationException("The student has not implemented this method yet.");
   }
 
   @Override
   public void processQuoteFiles() throws IOException {
     IFileExplorer explorer = new DFSFileExplorer();
-    explorer.explore(new File(WORKSPACE_DIRECTORY), new CompleteFileTransformer());    
+    explorer.explore(new File(WORKSPACE_DIRECTORY), new CompleteFileTransformer());
+    
+    
   }
 
 }

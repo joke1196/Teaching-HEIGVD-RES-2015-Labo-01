@@ -135,6 +135,8 @@ public class ApplicationTest {
     sb.append("\n");
     sb.append(fileD2);
     sb.append("\n");
+    System.out.println(sb.toString());
+    System.out.println(output);
     assertEquals(sb.toString(), output);
   }
   
