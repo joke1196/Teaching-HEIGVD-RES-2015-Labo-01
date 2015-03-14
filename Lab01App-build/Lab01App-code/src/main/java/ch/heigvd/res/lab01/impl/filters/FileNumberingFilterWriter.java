@@ -25,16 +25,8 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
   @Override
   public void write(String str, int off, int len) throws IOException {
-      
-     String[] sArray = str.split("\n");
-      int i = 1;
-      String m = new String();
-     for(String s : sArray){
-         m += i + "\t" + s;
-         i = i + 1;
-         System.out.println(m);
-     }
-      out.write(m);
+     
+      out.write();
   }
 
   @Override
@@ -46,16 +38,20 @@ public class FileNumberingFilterWriter extends FilterWriter {
         }
     }
     char[] s = new char[size+len];
-    for(int i = 0; i < len; i++){
+    char j = 0;
+    for(int i = 2; i < len; i++){
+        s[0] = ++j;
+        s[1] = '\t';
         if(cbuf[i] == '\n'){
-            size+=2;
+            
         }
     }
+    out.write(s);
   }
 
   @Override
   public void write(int c) throws IOException {
-   
+      out.write(c);
   }
 
 }

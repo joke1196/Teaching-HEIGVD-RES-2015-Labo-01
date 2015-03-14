@@ -1,5 +1,6 @@
 package ch.heigvd.res.lab01.impl;
 
+import java.io.File;
 import java.util.logging.Logger;
 
 /**
@@ -20,14 +21,36 @@ public class Utils {
    * contain any line separator, then the first element is an empty string.
    */
   public static String[] getNextLine(String lines) {
-    
     String[] array = new String[2];
-    int indexOfNextLine = lines.indexOf("\r:\n");
-    lines = lines.substring(indexOfNextLine);
-    array = lines.split("\r:\n", 1);
+    array[1] = "";
+    if(lines.contains("\r\n")){
+        
+        int index = lines.indexOf("\r\n");
+        array[0] = lines.substring(0, index + "\r\n".length());
+        if(index + 1 != lines.length()){
+            array[1] = lines.substring(index + "\r\n".length());
+        }
+        return array;
+    }else if(lines.contains("\n")){
+        int index = lines.indexOf("\n");
+        array[0] = lines.substring(0, index + "\n".length());
+        if(index + 1 != lines.length()){
+            array[1] = lines.substring(index + "\n".length());
+        }
+        
+        return array;
+    }else{
+        int index = lines.indexOf("\r");
+        array[0] = lines.substring(0, index + "\r".length());
+        if(index + 1 != lines.length()){
+            array[1] = lines.substring(index + "\r".length());
+        }
     
-    return array;
+        return array;
     
+    }
+    
+
     //throw new UnsupportedOperationException("The student has not implemented this method yet.");
   }
 

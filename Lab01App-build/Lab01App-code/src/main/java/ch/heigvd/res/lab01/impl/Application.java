@@ -159,11 +159,9 @@ public class Application implements IApplication {
          * be pretty easy (we want to write the filename, including the path, to the writer passed in argument).
          */
         try{
-            System.out.println("ps pbrlmn");
             writer.write(file.getPath().replaceAll("\\\\", "/")+"\n");
         }
         catch(IOException ex){
-            System.out.println("pbrlmn");
             LOG.log(Level.WARNING, "Error while printing file name", ex.getMessage());
         }
         
