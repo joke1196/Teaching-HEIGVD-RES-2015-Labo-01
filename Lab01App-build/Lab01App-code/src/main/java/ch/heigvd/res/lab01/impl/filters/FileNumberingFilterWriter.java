@@ -17,41 +17,64 @@ import java.util.logging.Logger;
  */
 public class FileNumberingFilterWriter extends FilterWriter {
 
-  private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
+    private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
 
-  public FileNumberingFilterWriter(Writer out) {
-    super(out);
-  }
+    public FileNumberingFilterWriter(Writer out) {
+        super(out);
+    }
 
-  @Override
-  public void write(String str, int off, int len) throws IOException {
-     
-      out.write();
-  }
+    private int lineNumber = 0;
+    private int macOsChar;
 
-  @Override
-  public void write(char[] cbuf, int off, int len) throws IOException {
-    int size = 2;
-    for(int i = 0; i < len; i++){
-        if(cbuf[i] == '\n'){
-            size+=2;
+    @Override
+    public void write(String str, int off, int len) throws IOException {
+        for (int i = off; i < off + len; i++) {
+            write(str.charAt(i));
+        }
+
+    }
+
+    @Override
+    public void write(char[] cbuf, int off, int len) throws IOException {
+
+        for (int i = off; i < off + len; i++) {
+            write(cbuf[i]);
         }
     }
-    char[] s = new char[size+len];
-    char j = 0;
-    for(int i = 2; i < len; i++){
-        s[0] = ++j;
-        s[1] = '\t';
-        if(cbuf[i] == '\n'){
-            
+
+    @Override
+    public void write(int c) throws IOException {
+
+        if (lineNumber == 0) {
+            lineNumber = lineNumber + 1;
+            printintToChar();
+            super.write('\t');
+            super.write(c);
+        } else {
+            if (c == '\n') {
+                lineNumber = lineNumber + 1;
+                super.write(c);
+                printintToChar();
+                super.write('\t');
+            } else if (macOsChar == '\r' && c != '\n') { //if it's only a \r for line return
+                lineNumber++;
+                printintToChar();
+                super.write('\t');
+                super.write(c); 
+            } else {
+                super.write(c);
+                
+            }
+            macOsChar = c;
         }
     }
-    out.write(s);
-  }
 
-  @Override
-  public void write(int c) throws IOException {
-      out.write(c);
-  }
+    public void printintToChar() throws IOException {
+        char[] array = String.valueOf(lineNumber).toCharArray();
+        for (int i = 0; i < array.length; i++) {
+            super.write((int) array[i]);
+        }
+
+    }
 
 }

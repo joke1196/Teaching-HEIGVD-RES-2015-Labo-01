@@ -95,10 +95,10 @@ public class Application implements IApplication {
       
       this.storeQuote(quote, "quote-" + i + ".utf8");
       
-      for (String tag : quote.getTags()) {
-              LOG.info(quote.getSource());
-        LOG.info("> " + tag);
-      }
+//      for (String tag : quote.getTags()) {
+//              LOG.info(quote.getSource());
+//        LOG.info("> " + tag);
+//      }
     }
   }
   
